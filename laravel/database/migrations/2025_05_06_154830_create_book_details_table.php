@@ -29,7 +29,10 @@ return new class extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->foreignId('genre_id');
+            $table->foreignId('genre_id')
+                ->constrained()
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
 
             $table->timestamps();
         });
