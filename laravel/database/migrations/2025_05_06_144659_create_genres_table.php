@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('genres', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('language_id')->constrained();
+            $table->string('name');
+            $table->foreignId('language_id')
+                ->constrained()
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
             $table->timestamps();
         });
     }
