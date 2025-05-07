@@ -8,6 +8,7 @@ use App\Models\Book;
 use App\Models\BookDetail;
 use App\Models\Genre;
 use App\Models\Language;
+use App\Models\Keyword;
 
 // Libs
 use Illuminate\Http\Request;
@@ -23,6 +24,7 @@ class BookController extends Controller
             'details.author',
             'details.language',
             'details.genre',
+            'details.keywords',
         ]);
 
         if ($langFilter !== '') {
@@ -36,6 +38,12 @@ class BookController extends Controller
         $allBookData=[];
         foreach($books as $book){
             foreach($book->details as $detail){
+
+                $keywords = $detail->keywords
+                    ->where('language_id', $detail->language_id)
+                    ->pluck('keyword')
+                    ->implode(', ');
+
                 if($langFilter!=='' && $detail->language->value !== $langFilter)
                     continue;
 
@@ -46,6 +54,8 @@ class BookController extends Controller
                     'author'=>$detail->author->name,
                     'language'=>$detail->language->value,
                     'genre'=>$detail->genre->name,
+                    'cover_path'=>$detail->cover_path,
+                    'keywords'=>$keywords,
                     'created_at'=>$detail->created_at->toDateTimeString(),
                     'updated_at'=>$detail->updated_at->toDateTimeString(),
                 ];
@@ -58,6 +68,13 @@ class BookController extends Controller
 
     public function create(Request $request)
     {
+        $keywords = $request->input('keyword', '');
+        $keywordsArr = [];
+
+        if($keywords !== '') {
+            $keywordsArr = explode(',', $keywords);
+        }
+
         $input = $request->validate([
             'title' => 'required|string|min:3|max:255',
             'author' => 'required|string|min:3|max:255',
@@ -65,8 +82,10 @@ class BookController extends Controller
             'genre' => 'required|string|min:3|max:255',
             'language' => 'required|string|in:English,Hungarian',
             'isbn' => 'required|string|size:13',
+            'cover_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
+            'keywords' => 'nullable|string',
         ]);
-
+        
         try {
             $authorId = Author::query()
                 ->firstOrCreate(['name' => $input['author']])
@@ -86,6 +105,16 @@ class BookController extends Controller
             $bookId = Book::query()
                 ->firstOrCreate(['isbn' => $input['isbn']])
                 ->id;
+
+            $keywords = array_filter(array_map('trim', explode(',', $input['keywords'] ?? '')));
+
+            foreach ($keywords as $word) {
+                Keyword::query()->firstOrCreate([
+                    'book_id' => $bookId,
+                    'language_id' => $languageId,
+                    'keyword' => $word,
+                ]);
+            }
 
             BookDetail::create([
                 'title' => $input['title'],

@@ -16,6 +16,7 @@ class BookDetail extends Model
         'genre_id',
         'language_id',
         'book_id',
+        'cover_path',
     ];
 
     public function author()
@@ -36,5 +37,10 @@ class BookDetail extends Model
     public function book()
     {
         return $this->belongsTo(Book::class);
+    }
+
+    public function keywords()
+    {
+        return $this->hasMany(Keyword::class, 'book_id', 'book_id');
     }
 }
