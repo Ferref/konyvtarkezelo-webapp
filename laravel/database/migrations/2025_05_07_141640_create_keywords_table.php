@@ -11,16 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('book_details', function (Blueprint $table) {
+        Schema::create('keywords', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('description');
-            $table->string('cover_path')->nullable();
+            $table->string('keyword');
             $table->foreignId('book_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->foreignId('author_id')
                 ->constrained()
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
@@ -28,13 +22,9 @@ return new class extends Migration
                 ->constrained()
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-
-            $table->foreignId('genre_id')
-                ->constrained()
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-
             $table->timestamps();
+
+            $table->unique(['book_id', 'language_id', 'keyword']);
         });
     }
 
@@ -43,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('book_details');
+        Schema::dropIfExists('keywords');
     }
 };
