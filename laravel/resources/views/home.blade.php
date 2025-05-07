@@ -58,14 +58,16 @@
     <div id="books-panel">
         @if(!empty($books))
             @foreach($books as $b)
-                <h2>{{ $b['title'] }}</h2>
-                <p>Isbn: {{ $b['isbn'] }}</p>
-                <p>Description :{{ $b['description'] }}</p>
-                <p>Author :{{ $b['author'] }}</p>
-                <p>Language :{{ $b['language'] }}</p>
-                <p>Genre: {{ $b['genre'] }}</p>
-                <p>Created at: {{ $b['created_at'] }}</p>
-                <p>Updated at: {{ $b['updated_at'] }}</p>
+                <div class="book-card">
+                    <h2>{{ $b['title'] }}</h2>
+                    <p>Isbn: {{ $b['isbn'] }}</p>
+                    <p>Description :{{ $b['description'] }}</p>
+                    <p>Author :{{ $b['author'] }}</p>
+                    <p>Language :{{ $b['language'] }}</p>
+                    <p>Genre: {{ $b['genre'] }}</p>
+                    <p>Created at: {{ $b['created_at'] }}</p>
+                    <p>Updated at: {{ $b['updated_at'] }}</p>
+                </div>
             @endforeach
         @endif
     </div>

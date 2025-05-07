@@ -16,7 +16,6 @@ body {
 .app-container {
     display: flex;
     height: 100vh;
-    overflow: hidden;
 }
 
 #search-panel {
@@ -59,9 +58,12 @@ body {
 }
 
 #books-panel {
+    display: grid;
     flex: 1;
     padding: 1rem;
     overflow-y: auto;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
 }
 
 #books-panel h2 {
@@ -77,14 +79,31 @@ body {
 @media (max-width: 768px) {
     .app-container {
         flex-direction: column;
+        height: auto;
     }
     #search-panel {
-        flex: 0 0 auto;
         width: 100%;
         border-right: none;
         border-bottom: 1px solid #ddd;
     }
     #books-panel {
-        padding-top: 0.5rem;
+        grid-template-columns: 1fr;
     }
+}
+
+.book-card {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.book-card h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+}
+
+.book-card p {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
 }
