@@ -93,6 +93,10 @@ body {
     line-height: 1.4;
 }
 
+.book-cover img{
+    max-height: 250px;
+}
+
 @media (max-width: 768px) {
     .app-container {
         flex-direction: column;
@@ -108,8 +112,15 @@ body {
     }
 }
 
+.book-cover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
 .book-card {
-    height: 400px;
+    height: 750px;
     background: #fff;
     padding: 1rem;
     border-radius: 6px;
