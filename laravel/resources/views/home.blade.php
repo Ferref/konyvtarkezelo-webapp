@@ -57,16 +57,21 @@
 
     <div id="books-panel">
         @if(!empty($books))
-            @foreach($books as $b)
+            @foreach($books as $book)
                 <div class="book-card">
-                    <h2>{{ $b['title'] }}</h2>
-                    <p>Isbn: {{ $b['isbn'] }}</p>
-                    <p>Description :{{ $b['description'] }}</p>
-                    <p>Author :{{ $b['author'] }}</p>
-                    <p>Language :{{ $b['language'] }}</p>
-                    <p>Genre: {{ $b['genre'] }}</p>
-                    <p>Created at: {{ $b['created_at'] }}</p>
-                    <p>Updated at: {{ $b['updated_at'] }}</p>
+                    <h2>{{ $book['title'] }}</h2>
+                    <p>Isbn: {{ $book['isbn'] }}</p>
+                    <p>Description :{{ $book['description'] }}</p>
+                    <p>Author :{{ $book['author'] }}</p>
+                    <p>Language :{{ $book['language'] }}</p>
+                    <p>Genre: {{ $book['genre'] }}</p>
+                    <p>Created at: {{ $book['created_at'] }}</p>
+                    <p>Updated at: {{ $book['updated_at'] }}</p>
+                    <form action="/delete-book/{{$book['id']}}" name="delete-book" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button name="delete-book">Delete book</button>
+                    </form>
                 </div>
             @endforeach
         @endif

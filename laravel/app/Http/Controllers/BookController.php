@@ -16,6 +16,11 @@ use Illuminate\Http\Request;
 class BookController extends Controller
 {
 
+    public function deleteBook(Book $book){
+        $book->delete();
+        return redirect('/get-books');
+    }
+
     public function getAllBooks(Request $request)
     {
         $langFilter = $request->input('language', '');
@@ -48,6 +53,7 @@ class BookController extends Controller
                     continue;
 
                 $allBookData[]=[
+                    'id' => $book->id,
                     'isbn'=>$book->isbn,
                     'title'=>$detail->title,
                     'description'=>$detail->description,
@@ -85,7 +91,7 @@ class BookController extends Controller
             'cover_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
             'keywords' => 'nullable|string',
         ]);
-        
+
         try {
             $authorId = Author::query()
                 ->firstOrCreate(['name' => $input['author']])
@@ -125,7 +131,7 @@ class BookController extends Controller
                 'book_id' => $bookId,
             ]);
 
-            return view('/home')->with('success', 'Book created!!');
+            return view('/get-books')->with('success', 'Book created!!');
         } catch (\Exception $e) {
             return back()->withInput()->with('error', $e->getMessage());
         }
