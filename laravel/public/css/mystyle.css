@@ -18,15 +18,18 @@ body {
     height: 100vh;
 }
 
-#search-panel {
+#search-panel,
+#book-edit {
     flex: 0 0 300px;
     background: #fff;
     padding: 1rem;
     border-right: 1px solid #ddd;
     overflow-y: auto;
+    width: 100%;
 }
 
-#search-panel label {
+#search-panel label,
+#book-edit {
     display: block;
     margin-bottom: 0.25rem;
     font-weight: bold;
@@ -36,7 +39,11 @@ body {
 #search-panel input,
 #search-panel select,
 #search-panel textarea,
-#search-panel button {
+#search-panel button,
+#book-edit input,
+#book-edit select,
+#book-edit textarea,
+#book-edit button {
     width: 100%;
     padding: 0.5rem;
     margin-bottom: 1rem;
@@ -45,7 +52,7 @@ body {
     font-size: 0.9rem;
 }
 
-#search-panel button {
+#search-panel button, #book-edit button {
     background-color: #28a745;
     color: #fff;
     border: none;
@@ -53,7 +60,7 @@ body {
     transition: background-color 0.2s ease;
 }
 
-#search-panel button:hover {
+#search-panel button:hover, #book-edit button:hover {
     background-color: #218838;
 }
 
@@ -66,7 +73,7 @@ body {
     gap: 1rem;
 }
 
-#books-panel button{
+#books-panel button {
     background-color: white;
     transition: 0.3s;
     padding: 0.5rem;
@@ -76,7 +83,8 @@ body {
     margin-top: 1rem;
 }
 
-#books-panel button:hover{
+#books-panel button:hover
+{
     background-color: black;
     color: white;
     margin: 1rem;
@@ -93,8 +101,18 @@ body {
     line-height: 1.4;
 }
 
+.book-cover,
+.book-cover-big {
+    border-radius: 1rem;
+    border: 3px solid rgba(0, 0, 0, 0.3);
+    width: 100%;
+}
 .book-cover img{
     max-height: 250px;
+}
+
+.book-cover-big {
+    max-height: 500px;
 }
 
 @media (max-width: 768px) {

@@ -17,6 +17,7 @@
             <label for="title">Title</label>
             <input type="text" id="title" name="title" placeholder="Write the title!">
 
+            <label for="author">Author</label>
             <input type="text" id="author" name="author" placeholder="Write the author!">
 
             <label for="description">Description</label>
@@ -77,6 +78,10 @@
                         <p>Created at: {{ $book['created_at'] }}</p>
                         <p>Updated at: {{ $book['updated_at'] }}</p>
                     </div>
+                    <form action="/edit-book/{{$book['id']}}" name="edit-book" method="GET">
+                        @csrf
+                        <button name="edit-book">Edit book</button>
+                    </form>
                     <form action="/delete-book/{{$book['id']}}" name="delete-book" method="POST">
                         @csrf
                         @method('DELETE')
