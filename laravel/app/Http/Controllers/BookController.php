@@ -29,7 +29,6 @@ class BookController extends Controller
         ]);
 
         try {
-
             $data = array_map('strip_tags', $data);
             $data['existing_cover_path'] = $book['cover_path'];
 
@@ -91,56 +90,54 @@ class BookController extends Controller
         return redirect('/get-books');
     }
 
-    public function getAllBooks(Request $request)
+    public function getBooks(Request $request)
     {
-        $langFilter = $request->input('language', '');
+        $filters = $request->only(['title','author','description','genre','language','keywords']);
 
-        $query = Book::with([
-            'details.author',
-            'details.language',
-            'details.genre',
-            'details.keywords',
-        ]);
-
-        if ($langFilter !== '') {
-            $query->whereHas('details.language', function($q) use ($langFilter) {
-                $q->where('value', $langFilter);
+        $query = Book::query()
+            ->with(['details.author','details.language','details.genre','details.keywords'])
+            ->whereHas('details', function($q) use($filters) {
+                if(!empty($filters['title'])){
+                    $q->where('title','like','%'.$filters['title'].'%');
+                }
+                if(!empty($filters['description'])){
+                    $q->where('description','like','%'.$filters['description'].'%');
+                }
+                if(!empty($filters['genre'])){
+                    $q->whereHas('genre', fn($g)=>$g->where('name','like','%'.$filters['genre'].'%'));
+                }
+                if(!empty($filters['language'])){
+                    $q->whereHas('language', fn($l)=>$l->where('value',$filters['language']));
+                }
+                if(!empty($filters['keywords'])){
+                    $q->whereHas('keywords', fn($k)=>$k->where('keyword','like','%'.$filters['keywords'].'%'));
+                }
+                if(!empty($filters['author'])){
+                    $q->whereHas('author', fn($a)=>$a->where('name','like','%'.$filters['author'].'%'));
+                }
             });
-        }
 
-        $books = $query->get();
-
-        $allBookData=[];
-        foreach($books as $book){
-            foreach($book->details as $detail){
-
-                $keywords = $detail->keywords
-                    ->where('language_id', $detail->language_id)
-                    ->pluck('keyword')
-                    ->implode(', ');
-
-                if($langFilter!=='' && $detail->language->value !== $langFilter)
-                    continue;
-
-                $allBookData[]=[
+        $books = $query->get()->flatMap(function(Book $book) {
+            return $book->details->map(function($detail) use($book) {
+                $keywords = $detail->keywords->pluck('keyword')->implode(', ');
+                return [
                     'id' => $book->id,
-                    'isbn'=>$book->isbn,
-                    'title'=>$detail->title,
-                    'description'=>$detail->description,
-                    'author'=>$detail->author->name,
-                    'language'=>$detail->language->value,
-                    'genre'=>$detail->genre->name,
-                    'cover_path'=>$detail->cover_path,
-                    'keywords'=>$keywords,
-                    'created_at'=>$detail->created_at->toDateTimeString(),
-                    'updated_at'=>$detail->updated_at->toDateTimeString(),
+                    'isbn' => $book->isbn,
+                    'title' => $detail->title,
+                    'description' => $detail->description,
+                    'author' => $detail->author->name,
+                    'language'=> $detail-> language->value,
+                    'genre'=> $detail-> genre->name,
+                    'cover_path'=> $detail->cover_path,
+                    'keywords' => $keywords,
+                    'created_at' => $detail->created_at->toDateTimeString(),
+                    'updated_at' => $detail->updated_at->toDateTimeString(),
                 ];
-            }
-        }
+            });
+        });
 
-        return view('home')->with('books', $allBookData);
+        return view('home',['books'=>$books]);
     }
-
 
     public function create(Request $request)
     {
@@ -162,7 +159,7 @@ class BookController extends Controller
             'keywords' => 'nullable|string',
         ]);
 
-        $incomingFields = array_map('strip_tags', $input);
+        $input = array_map('strip_tags', $input);
 
         try {
             $cover_path = null;
