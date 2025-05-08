@@ -11,18 +11,17 @@
 <body>
 <div class="app-container">
     <div id="search-panel">
-        <form action="/create-book" method="POST">
+        <form action="/create-book" method="POST" enctype="multipart/form-data">
             @csrf
             <label for="title">Title</label>
             <input type="text" id="title" name="title" placeholder="Write the title!">
 
-            <label for="author">Author</label>
             <input type="text" id="author" name="author" placeholder="Write the author!">
 
             <label for="description">Description</label>
             <textarea id="description" name="description" placeholder="Write the description!"></textarea>
 
-            <label for="keywords">Keywords</label>
+            <label for="keywords">Keywords (optional)</label>
             <textarea id="keywords" name="keywords" placeholder="Write keywords separated by ',' !"></textarea>
 
             <label for="genre">Genre</label>
@@ -37,6 +36,9 @@
 
             <label for="genre">ISBN</label>
             <input type="text" id="isbn" name="isbn" placeholder="Write the isbn!">
+
+            <label for="cover_path">Cover</label>
+            <input type="file" id="cover_path" name="cover_path"><br>
 
             <button type="submit">Create Book</button>
         </form>
@@ -59,14 +61,21 @@
         @if(!empty($books))
             @foreach($books as $book)
                 <div class="book-card">
-                    <h2>{{ $book['title'] }}</h2>
-                    <p>Isbn: {{ $book['isbn'] }}</p>
-                    <p>Description :{{ $book['description'] }}</p>
-                    <p>Author :{{ $book['author'] }}</p>
-                    <p>Language :{{ $book['language'] }}</p>
-                    <p>Genre: {{ $book['genre'] }}</p>
-                    <p>Created at: {{ $book['created_at'] }}</p>
-                    <p>Updated at: {{ $book['updated_at'] }}</p>
+                    @if(!empty($book['cover_path']))
+                        <div class="book-cover">
+                            <img src="{{ asset($book['cover_path']) }}" alt='cover-img'>
+                        </div>
+                    @endif
+                    <div class="book-data">
+                        <h2>{{ $book['title'] }}</h2>
+                        <p>Isbn: {{ $book['isbn'] }}</p>
+                        <p>Description :{{ $book['description'] }}</p>
+                        <p>Author :{{ $book['author'] }}</p>
+                        <p>Language :{{ $book['language'] }}</p>
+                        <p>Genre: {{ $book['genre'] }}</p>
+                        <p>Created at: {{ $book['created_at'] }}</p>
+                        <p>Updated at: {{ $book['updated_at'] }}</p>
+                    </div>
                     <form action="/delete-book/{{$book['id']}}" name="delete-book" method="POST">
                         @csrf
                         @method('DELETE')

@@ -43,4 +43,5 @@ class BookDetail extends Model
     {
         return $this->hasMany(Keyword::class, 'book_id', 'book_id');
     }
+
 }

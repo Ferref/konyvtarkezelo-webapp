@@ -88,11 +88,23 @@ class BookController extends Controller
             'genre' => 'required|string|min:3|max:255',
             'language' => 'required|string|in:English,Hungarian',
             'isbn' => 'required|string|size:13',
-            'cover_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
+            'cover_path' => 'nullable|file|max:2048',
             'keywords' => 'nullable|string',
         ]);
 
         try {
+            $cover_path = null;
+
+            if($request->hasFile('cover_path')){
+                $coverFile = $request->file('cover_path');
+                $coverFileName = time().'.'.$coverFile->getClientOriginalName();
+                $coverFile->move(public_path('covers'), $coverFileName);
+                $cover_path = 'covers/' . $coverFileName;
+            }
+            else{
+                $cover_path = 'covers/no-cover.png';
+            }
+
             $authorId = Author::query()
                 ->firstOrCreate(['name' => $input['author']])
                 ->id;
@@ -129,6 +141,7 @@ class BookController extends Controller
                 'genre_id' => $genreId,
                 'language_id' => $languageId,
                 'book_id' => $bookId,
+                'cover_path' => $cover_path,
             ]);
 
             return view('/get-books')->with('success', 'Book created!!');
