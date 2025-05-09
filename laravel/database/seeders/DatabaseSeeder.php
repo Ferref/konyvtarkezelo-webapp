@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
 
         DB::table('keywords')->truncate();
         DB::table('book_details')->truncate();
-        DB::table('books')->truncate();
         DB::table('genres')->truncate();
         DB::table('authors')->truncate();
         DB::table('languages')->truncate();
@@ -27,11 +26,10 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             LanguagesSeeder::class,
-//            AuthorsSeeder::class,
-//            GenresSeeder::class,
-//            BooksSeeder::class,
-//            BookDetailsSeeder::class,
-//            KeywordsSeeder::class,
+            AuthorsSeeder::class,
+            GenresSeeder::class,
+            BookDetailsSeeder::class,
+            KeywordsSeeder::class,
         ]);
     }
 }

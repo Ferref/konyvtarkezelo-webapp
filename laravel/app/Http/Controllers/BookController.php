@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 // Models
 use App\Models\Author;
-use App\Models\Book;
 use App\Models\BookDetail;
 use App\Models\Genre;
 use App\Models\Language;
@@ -15,7 +14,7 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-    public function editBook(Request $request, Book $book)
+    public function editBook(Request $request, BookDetail $book)
     {
         $data = $request->validate([
             'title' => 'required|string|min:3|max:255',
@@ -45,7 +44,7 @@ class BookController extends Controller
                 'isbn' => $data['isbn'],
             ]);
 
-            $detail = $book->details()->first();
+            $detail= BookDetail::query()->where('id', $book->id)->get()->toArray();
 
             $authorId = Author::query()->firstOrCreate(['name' => $data['author']])->id;
             $languageId = Language::query()->firstOrCreate(['value' => $data['language']])->id;
@@ -54,7 +53,7 @@ class BookController extends Controller
                 'name' => $data['genre'],
             ])->id;
 
-            $detail->update([
+            $book->update([
                 'title' => $data['title'],
                 'description' => $data['description'],
                 'cover_path' => $cover,
@@ -80,12 +79,12 @@ class BookController extends Controller
         return redirect('/get-books')->with('success', 'Book updated!');
     }
 
-    public function showEditBookForm(Request $request, Book $book){
-        $bookDetails = $book->details()->first();
+    public function showEditBookForm(Request $request, BookDetail $book){
+        $bookDetails = $book->toArray();
         return view('edit', ['book' => $book, 'bookDetails' => $bookDetails]);
     }
 
-    public function deleteBook(Book $book){
+    public function deleteBook(BookDetail $book){
         $book->delete();
         return redirect('/get-books');
     }
@@ -94,47 +93,43 @@ class BookController extends Controller
     {
         $filters = $request->only(['title','author','description','genre','language','keywords']);
 
-        $query = Book::query()
-            ->with(['details.author','details.language','details.genre','details.keywords'])
-            ->whereHas('details', function($q) use($filters) {
-                if(!empty($filters['title'])){
-                    $q->where('title','like','%'.$filters['title'].'%');
-                }
-                if(!empty($filters['description'])){
-                    $q->where('description','like','%'.$filters['description'].'%');
-                }
-                if(!empty($filters['genre'])){
-                    $q->whereHas('genre', fn($g)=>$g->where('name','like','%'.$filters['genre'].'%'));
-                }
-                if(!empty($filters['language'])){
-                    $q->whereHas('language', fn($l)=>$l->where('value',$filters['language']));
-                }
-                if(!empty($filters['keywords'])){
-                    $q->whereHas('keywords', fn($k)=>$k->where('keyword','like','%'.$filters['keywords'].'%'));
-                }
-                if(!empty($filters['author'])){
-                    $q->whereHas('author', fn($a)=>$a->where('name','like','%'.$filters['author'].'%'));
-                }
-            });
+        $query = BookDetail::query()->with(['author','language','genre','keywords']);
 
-        $books = $query->get()->flatMap(function(Book $book) {
-            return $book->details->map(function($detail) use($book) {
-                $keywords = $detail->keywords->pluck('keyword')->implode(', ');
+        if(!empty($filters['title'])){
+            $query->where('title','like','%'.$filters['title'].'%');
+        }
+        if(!empty($filters['description'])){
+            $query->where('description','like','%'.$filters['description'].'%');
+        }
+        if(!empty($filters['genre'])){
+            $query->whereHas('genre', fn($g)=>$g->where('name','like','%'.$filters['genre'].'%'));
+        }
+        if(!empty($filters['language'])){
+            $query->whereHas('language', fn($l)=>$l->where('value',$filters['language']));
+        }
+        if(!empty($filters['keywords'])){
+            $query->whereHas('keywords', fn($k)=>$k->where('keyword','like','%'.$filters['keywords'].'%'));
+        }
+        if(!empty($filters['author'])){
+            $query->whereHas('author', fn($a)=>$a->where('name','like','%'.$filters['author'].'%'));
+        }
+
+        $books = $query->get()->map(function(BookDetail $book){
+                $keywords = $book->keywords->pluck('keyword')->implode(', ');
                 return [
                     'id' => $book->id,
                     'isbn' => $book->isbn,
-                    'title' => $detail->title,
-                    'description' => $detail->description,
-                    'author' => $detail->author->name,
-                    'language'=> $detail-> language->value,
-                    'genre'=> $detail-> genre->name,
-                    'cover_path'=> $detail->cover_path,
+                    'title' => $book->title,
+                    'description' => $book->description,
+                    'author' => $book->author->name,
+                    'language'=> $book-> language->value,
+                    'genre'=> $book-> genre->name,
+                    'cover_path'=> $book->cover_path,
                     'keywords' => $keywords,
-                    'created_at' => $detail->created_at->toDateTimeString(),
-                    'updated_at' => $detail->updated_at->toDateTimeString(),
+                    'created_at' => $book->created_at->toDateTimeString(),
+                    'updated_at' => $book->updated_at->toDateTimeString(),
                 ];
             });
-        });
 
         return view('home',['books'=>$books]);
     }
@@ -189,15 +184,10 @@ class BookController extends Controller
                 ])
                 ->id;
 
-            $bookId = Book::query()
-                ->firstOrCreate(['isbn' => $input['isbn']])
-                ->id;
-
             $keywords = array_filter(array_map('trim', explode(',', $input['keywords'] ?? '')));
 
             foreach ($keywords as $word) {
                 Keyword::query()->firstOrCreate([
-                    'book_id' => $bookId,
                     'language_id' => $languageId,
                     'keyword' => $word,
                 ]);
@@ -209,7 +199,7 @@ class BookController extends Controller
                 'author_id' => $authorId,
                 'genre_id' => $genreId,
                 'language_id' => $languageId,
-                'book_id' => $bookId,
+                'isbn' => $input['isbn'],
                 'cover_path' => $cover_path,
             ]);
 
