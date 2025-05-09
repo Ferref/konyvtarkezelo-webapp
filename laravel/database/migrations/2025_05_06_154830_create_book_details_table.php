@@ -16,10 +16,6 @@ return new class extends Migration
             $table->string('title');
             $table->string('description');
             $table->string('cover_path')->nullable();
-            $table->foreignId('book_id')
-                ->constrained()
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
             $table->foreignId('author_id')
                 ->constrained()
                 ->onDelete('cascade')

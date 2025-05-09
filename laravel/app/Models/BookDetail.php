@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Faker\Calculator\Isbn;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -15,7 +16,6 @@ class BookDetail extends Model
         'author_id',
         'genre_id',
         'language_id',
-        'book_id',
         'cover_path',
     ];
 
@@ -32,11 +32,6 @@ class BookDetail extends Model
     public function language()
     {
         return $this->belongsTo(Language::class);
-    }
-
-    public function book()
-    {
-        return $this->belongsTo(Book::class);
     }
 
     public function keywords()

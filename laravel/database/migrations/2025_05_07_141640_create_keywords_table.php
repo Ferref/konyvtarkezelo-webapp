@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('keyword');
             $table->foreignId('book_id')
-                ->constrained()
+                ->constrained('book_details')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->foreignId('language_id')
