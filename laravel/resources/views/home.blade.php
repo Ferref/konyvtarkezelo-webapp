@@ -83,6 +83,7 @@
 
     <div id="books-panel">
         @if(!empty($books))
+            {{dd($books)}}
             @foreach($books as $book)
                 <div class="book-card">
                     @if(!empty($book['cover_path']))
