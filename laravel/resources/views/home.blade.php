@@ -5,10 +5,11 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Könyvtárkezelő</title>
+    <title>Bookhandler</title>
     <link rel="icon" href={{'stack-of-books.ico'}} type='image/x-icon'>
     <link rel="stylesheet" href="{{ asset('css/mystyle.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src={{asset('js/handler.js')}} defer></script>
 </head>
 <body>
 <div class="app-container">
@@ -67,7 +68,7 @@
                 <input type="file" id="cover_path" name="cover_path">
 
                 <button type="submit">Search Book</button>
-                <button type="submit" formmethod="POST" formaction="/create-book">Create Book</button>
+                <button class="confirmed" type="submit" formmethod="POST" formaction="/create-book">Create Book</button>
             </form>
         </div>
         @if($errors->any())
@@ -83,7 +84,6 @@
 
     <div id="books-panel">
         @if(!empty($books))
-            {{dd($books)}}
             @foreach($books as $book)
                 <div class="book-card">
                     @if(!empty($book['cover_path']))
@@ -109,7 +109,7 @@
                     <form action="/delete-book/{{$book['id']}}" name="delete-book" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button name="delete-book">Delete book</button>
+                        <button class="confirmed" name="delete-book">Delete book</button>
                     </form>
                 </div>
             @endforeach
