@@ -60,7 +60,7 @@ class KeywordsSeeder extends Seeder
                 'language_id' => 1,
             ],
 
-            // Az ellopott cirkáló
+            // Az elveszett cirkáló
             [
                 'keyword' => 'Ellopott',
                 'book_id' => 4,

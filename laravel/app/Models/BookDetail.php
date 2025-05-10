@@ -37,7 +37,7 @@ class BookDetail extends Model
 
     public function keywords()
     {
-        return $this->hasMany(Keyword::class, 'book_id', 'book_id');
+        return $this->hasMany(Keyword::class, 'book_id');
     }
 
 }
