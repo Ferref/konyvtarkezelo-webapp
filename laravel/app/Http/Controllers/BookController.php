@@ -44,8 +44,6 @@ class BookController extends Controller
                 'isbn' => $data['isbn'],
             ]);
 
-            $detail= BookDetail::query()->where('id', $book->id)->get()->toArray();
-
             $authorId = Author::query()->firstOrCreate(['name' => $data['author']])->id;
             $languageId = Language::query()->firstOrCreate(['value' => $data['language']])->id;
             $genreId = Genre::query()->firstOrCreate([
@@ -92,7 +90,6 @@ class BookController extends Controller
     public function getBooks(Request $request)
     {
         $filters = $request->only(['title','author','description','genre','language','keywords']);
-
         $query = BookDetail::query()->with(['author','language','genre','keywords']);
 
         $selection = [
