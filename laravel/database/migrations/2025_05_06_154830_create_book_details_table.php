@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('description');
+            $table->char('isbn', 13);
             $table->string('cover_path')->nullable();
             $table->foreignId('author_id')
                 ->constrained()
