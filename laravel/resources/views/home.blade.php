@@ -45,11 +45,12 @@
                 <input list="keywords-list" id="keywords" name="keywords" placeholder="Comma separated" value="{{ request('keywords') }}">
 
                 <label for="language">Language <i class="fa fa-search"></i></label>
-                <select id="language" name="language">
-                    <option value="" {{ request('language')==''?'selected':'' }}>All</option>
-                    <option value="English" {{ request('language')=='English'?'selected':'' }}>English</option>
-                    <option value="Hungarian" {{ request('language')=='Hungarian'?'selected':'' }}>Hungarian</option>
-                </select>
+                <input list="languages" id="language" name="language" placeholder="Write the language!" value="{{ request('language') }}">
+                <datalist id="language">
+                    @foreach($selection['languages'] as $language)
+                        <option value="{{ $language }}">{{ $language }}</option>
+                    @endforeach
+                </datalist>
 
                 <label for="isbn">ISBN <i class="fa fa-search"></i></label>
                 <input list="isbns" id="isbn" name="isbn" placeholder="Write the isbn!" value="{{ request('isbn') }}">
@@ -82,6 +83,7 @@
 
     <div id="books-panel">
         @if(!empty($books))
+            {{dd($books)}}
             @foreach($books as $book)
                 <div class="book-card">
                     @if(!empty($book['cover_path']))
@@ -98,6 +100,7 @@
                         <p>Genre: {{ $book['genre'] }}</p>
                         <p>Created at: {{ $book['created_at'] }}</p>
                         <p>Updated at: {{ $book['updated_at'] }}</p>
+                        <p>Keywords: {{ $book['keywords'] }}</p>
                     </div>
                     <form action="/edit-book/{{$book['id']}}" name="edit-book" method="GET">
                         @csrf
