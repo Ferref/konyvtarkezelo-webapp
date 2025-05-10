@@ -17,6 +17,7 @@ class BookDetail extends Model
         'genre_id',
         'language_id',
         'cover_path',
+        'isbn',
     ];
 
     public function author()

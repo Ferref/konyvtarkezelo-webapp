@@ -95,6 +95,14 @@ class BookController extends Controller
 
         $query = BookDetail::query()->with(['author','language','genre','keywords']);
 
+        $selection = [
+            'titles' => BookDetail::query()->pluck('title')->unique()->values()->all(),
+            'authors' => Author::query()->pluck('name')->unique()->values()->all(),
+            'languages' => Language::query()->pluck('value')->unique()->values()->all(),
+            'genres' => Genre::query()->pluck('name')->unique()->values()->all(),
+            'isbn' => BookDetail::query()->pluck('isbn')->unique()->values()->all(),
+        ];
+
         if(!empty($filters['title'])){
             $query->where('title','like','%'.$filters['title'].'%');
         }
@@ -131,7 +139,7 @@ class BookController extends Controller
                 ];
             });
 
-        return view('home',['books'=>$books]);
+        return view('home',['books'=>$books, 'selection'=>$selection]);
     }
 
     public function create(Request $request)

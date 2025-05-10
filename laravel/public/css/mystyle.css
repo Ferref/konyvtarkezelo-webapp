@@ -18,7 +18,7 @@ body {
     height: 100vh;
 }
 
-#search-panel,
+#left-panel,
 #book-edit {
     flex: 0 0 300px;
     background: #fff;
@@ -28,7 +28,7 @@ body {
     width: 100%;
 }
 
-#search-panel label,
+#left-panel label,
 #book-edit {
     display: block;
     margin-bottom: 0.25rem;
@@ -36,10 +36,10 @@ body {
     font-size: 0.9rem;
 }
 
-#search-panel input,
-#search-panel select,
-#search-panel textarea,
-#search-panel button,
+#left-panel input,
+#left-panel select,
+#left-panel textarea,
+#left-panel button,
 #book-edit input,
 #book-edit select,
 #book-edit textarea,
@@ -52,7 +52,7 @@ body {
     font-size: 0.9rem;
 }
 
-#search-panel button, #book-edit button {
+#left-panel button, #book-edit button {
     background-color: #28a745;
     color: #fff;
     border: none;
@@ -60,7 +60,7 @@ body {
     transition: background-color 0.2s ease;
 }
 
-#search-panel button:hover, #book-edit button:hover {
+#left-panel button:hover, #book-edit button:hover {
     background-color: #218838;
 }
 
@@ -120,7 +120,7 @@ body {
         flex-direction: column;
         height: auto;
     }
-    #search-panel {
+    #left-panel {
         width: 100%;
         border-right: none;
         border-bottom: 1px solid #ddd;
