@@ -13,9 +13,35 @@ body {
     color: #333;
 }
 
+.navbar {
+    display: none;
+}
+
+#hamburger {
+    display: none;
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    z-index: 1001;
+    cursor: pointer;
+}
+
 .app-container {
     display: flex;
     height: 100vh;
+}
+
+#left-panel {
+    flex: 0 0 300px;
+    background: white;
+    padding: 1rem;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+    min-width: 300px;
+    transition: flex-basis 0.2s ease, width 0.2s ease, padding 0.2s ease;
 }
 
 #left-panel,
@@ -25,7 +51,6 @@ body {
     padding: 1rem;
     border-right: 1px solid #ddd;
     overflow-y: auto;
-    width: 100%;
 }
 
 #left-panel label,
@@ -101,22 +126,64 @@ body {
     line-height: 1.4;
 }
 
-.book-cover,
-.book-cover-big {
+.book-cover {
+    background-image: url('../covers/books-bg.jpg');
+    background-size: cover;
+}
+
+.book-cover-small {
     border-radius: 1rem;
     border: 3px solid rgba(0, 0, 0, 0.3);
     width: 100%;
 }
-.book-cover img{
+.book-cover-small img{
     max-height: 250px;
 }
 
-.book-cover-big {
+.book-cover-big{
+    width: 100%;
+    height: 100vh;
+}
+
+.book-cover-big img {
     max-height: 500px;
+    box-shadow: 5px 5px 5px rgba(255, 255, 255, 0.5);
+
 }
 
 @media (max-width: 768px) {
+    #left-panel.collapsed {
+        flex-basis: 0;
+        width: 0;
+        padding: 0;
+        border-right: none;
+        overflow: hidden;
+        min-width: 0;
+    }
+
+    #hamburger {
+        display: block;
+        position: fixed;
+        width: 100%;
+    }
+
+    .navbar {
+        display: block;
+        background-color: #f0f0f0;
+        width: 100vw;
+        position: fixed;
+        z-index: 998;
+        height: 3rem;
+        top: 0;
+    }
+
+    .menu {
+        background-color: #f0f0f0;
+        height:100%;
+    }
+
     .app-container {
+        margin-top: 1rem;
         flex-direction: column;
         height: auto;
     }
@@ -124,8 +191,20 @@ body {
         width: 100%;
         border-right: none;
         border-bottom: 1px solid #ddd;
+        left: -100%;
+        height: 100vh;
+        position: sticky;
+        top: 3rem;
+        z-index: 999;
+        border-right: none;
+        border-bottom: 1px solid black;
+    }
+
+    #left-panel.open {
+        left: 0;
     }
     #books-panel {
+        margin-top: 0;
         grid-template-columns: 1fr;
     }
 }
