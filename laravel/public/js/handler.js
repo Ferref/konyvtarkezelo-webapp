@@ -1,3 +1,4 @@
+// COnfirmation handler
 const confirmButtons = document.getElementsByClassName('confirmed');
 
 Array.from(confirmButtons).forEach(button => {

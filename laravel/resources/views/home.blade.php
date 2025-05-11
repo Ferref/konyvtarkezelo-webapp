@@ -49,7 +49,12 @@
                     </datalist>
 
                     <label for="keywords">Keywords (optional) <i class="fa fa-search"></i></label>
-                    <input list="keywords-list" id="keywords" name="keywords" placeholder="Comma separated" value="{{ request('keywords') }}">
+                    <input list="keywords" name="keywords" multiple placeholder="Comma separated" value="{{ request('keywords') }}">
+                    <datalist id="keywords">
+                        @foreach($selection['keywords'] as $keywords)
+                            <option value="{{ $keywords }}">{{ $keywords }}</option>
+                        @endforeach
+                    </datalist>
 
                     <label for="language">Language <i class="fa fa-search"></i></label>
                     <input list="languages" id="language" name="language" placeholder="Write the language!" value="{{ request('language') }}">

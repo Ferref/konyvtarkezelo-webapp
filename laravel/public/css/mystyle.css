@@ -17,6 +17,9 @@ body {
     display: none;
 }
 
+#book-edit h2{
+    padding-bottom: 1rem;
+}
 #hamburger {
     display: none;
     position: fixed;

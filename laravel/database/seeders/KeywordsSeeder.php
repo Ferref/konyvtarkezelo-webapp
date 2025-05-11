@@ -19,16 +19,22 @@ class KeywordsSeeder extends Seeder
                 'keyword' => 'Love',
                 'book_id' => 1,
                 'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'keyword' => 'Romantic',
                 'book_id' => 1,
                 'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'keyword' => 'Deadly',
                 'book_id' => 1,
                 'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
 
             // Murder on the orient express
@@ -36,11 +42,15 @@ class KeywordsSeeder extends Seeder
                 'keyword' => 'Mystery',
                 'book_id' => 2,
                 'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'keyword' => 'Train',
                 'book_id' => 2,
                 'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
 
             // The Shining
@@ -48,16 +58,22 @@ class KeywordsSeeder extends Seeder
                 'keyword' => 'Winter',
                 'book_id' => 3,
                 'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'keyword' => 'House',
                 'book_id' => 3,
                 'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'keyword' => 'Deadly',
                 'book_id' => 3,
                 'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
 
             // Az elveszett cirkáló
@@ -65,6 +81,8 @@ class KeywordsSeeder extends Seeder
                 'keyword' => 'Ellopott',
                 'book_id' => 4,
                 'language_id' => 2,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }
