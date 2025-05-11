@@ -79,7 +79,17 @@ class BookController extends Controller
 
     public function showEditBookForm(Request $request, BookDetail $book){
         $bookDetails = $book->toArray();
-        return view('edit', ['book' => $book, 'bookDetails' => $bookDetails]);
+
+        $selection = [
+            'titles' => BookDetail::query()->pluck('title')->unique()->values()->all(),
+            'authors' => Author::query()->pluck('name')->unique()->values()->all(),
+            'languages' => Language::query()->pluck('value')->unique()->values()->all(),
+            'genres' => Genre::query()->pluck('name')->unique()->values()->all(),
+            'isbn' => BookDetail::query()->pluck('isbn')->unique()->values()->all(),
+            'keywords' => Keyword::query()->pluck('keyword')->unique()->values()->all(),
+        ];
+
+        return view('edit', ['book' => $bookDetails, 'selection' => $selection]);
     }
 
     public function deleteBook(BookDetail $book){
@@ -98,6 +108,7 @@ class BookController extends Controller
             'languages' => Language::query()->pluck('value')->unique()->values()->all(),
             'genres' => Genre::query()->pluck('name')->unique()->values()->all(),
             'isbn' => BookDetail::query()->pluck('isbn')->unique()->values()->all(),
+            'keywords' => Keyword::query()->pluck('keyword')->unique()->values()->all(),
         ];
 
         if(!empty($filters['title'])){
@@ -112,9 +123,15 @@ class BookController extends Controller
         if(!empty($filters['language'])){
             $query->whereHas('language', fn($l)=>$l->where('value',$filters['language']));
         }
-        if(!empty($filters['keywords'])){
-            $query->whereHas('keywords', fn($k)=>$k->where('keyword','like','%'.$filters['keywords'].'%'));
+        if (!empty($filters['keywords'])) {
+            $terms = array_filter(array_map('trim', explode(',', $filters['keywords'])));
+            foreach ($terms as $term) {
+                $query->whereHas('keywords', function ($q) use ($term) {
+                    $q->where('keyword', 'like', '%' . $term . '%');
+                });
+            }
         }
+
         if(!empty($filters['author'])){
             $query->whereHas('author', fn($a)=>$a->where('name','like','%'.$filters['author'].'%'));
         }
