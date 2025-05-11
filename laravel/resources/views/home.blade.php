@@ -105,13 +105,17 @@
                         <div class="book-data">
                             <h2>{{ $book['title'] }}</h2>
                             <p>Isbn: {{ $book['isbn'] }}</p>
-                            <p>Description: {{ $book['description'] }}</p>
                             <p>Author: {{ $book['author'] }}</p>
                             <p>Language: {{ $book['language'] }}</p>
                             <p>Genre: {{ $book['genre'] }}</p>
                             <p>Created at: {{ $book['created_at'] }}</p>
                             <p>Updated at: {{ $book['updated_at'] }}</p>
                             <p>Keywords: {{ $book['keywords'] }}</p>
+                            <button class="show-desc">Show Description</button>
+                            <div class="description display-none">
+                                <i class="fa fa-close close"></i>
+                                {{ $book['description'] }}
+                            </div>
                         </div>
                         <form action="/edit-book/{{$book['id']}}" name="edit-book" method="GET">
                             @csrf
@@ -120,7 +124,7 @@
                         <form action="/delete-book/{{$book['id']}}" name="delete-book" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button class="confirmed" name="delete-book">Delete book</button>
+                            <button id="delete-btn" class="confirmed" name="delete-book">Delete book</button>
                         </form>
                     </div>
                 @endforeach
