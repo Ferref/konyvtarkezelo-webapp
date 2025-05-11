@@ -16,7 +16,7 @@ class BookController extends Controller
 {
     public function editBook(Request $request, BookDetail $book)
     {
-        $data = $request->validate([
+        $input = $request->validate([
             'title' => 'required|string|min:3|max:255',
             'author' => 'required|string|min:3|max:255',
             'description' => 'required|string|max:1000',
@@ -28,8 +28,12 @@ class BookController extends Controller
         ]);
 
         try {
-            $data = array_map('strip_tags', $data);
-            $data['existing_cover_path'] = $book['cover_path'];
+            $input = array_map('strip_tags', $input);
+
+            foreach (['title','author','genre','language', 'keywords'] as $f)
+                if (isset($input[$f])) $input[$f] = ucwords(strtolower($input[$f]));
+
+            $input['existing_cover_path'] = $book['cover_path'];
 
             if ($request->hasFile('cover_path')) {
                 $file = $request->file('cover_path');
@@ -37,30 +41,30 @@ class BookController extends Controller
                 $file->move(public_path('covers'), $name);
                 $cover = 'covers/' . $name;
             } else {
-                $cover = $data['existing_cover_path'];
+                $cover = $input['existing_cover_path'];
             }
 
             $book->update([
-                'isbn' => $data['isbn'],
+                'isbn' => $input['isbn'],
             ]);
 
-            $authorId = Author::query()->firstOrCreate(['name' => $data['author']])->id;
-            $languageId = Language::query()->firstOrCreate(['value' => $data['language']])->id;
+            $authorId = Author::query()->firstOrCreate(['name' => $input['author']])->id;
+            $languageId = Language::query()->firstOrCreate(['value' => $input['language']])->id;
             $genreId = Genre::query()->firstOrCreate([
                 'language_id' => $languageId,
-                'name' => $data['genre'],
+                'name' => $input['genre'],
             ])->id;
 
             $book->update([
-                'title' => $data['title'],
-                'description' => $data['description'],
+                'title' => $input['title'],
+                'description' => $input['description'],
                 'cover_path' => $cover,
                 'author_id' => $authorId,
                 'genre_id' => $genreId,
                 'language_id' => $languageId,
             ]);
 
-            $keywords = array_filter(array_map('trim', explode(',', $data['keywords'] ?? '')));
+            $keywords = array_filter(array_map('trim', explode(',', $input['keywords'] ?? '')));
             Keyword::query()->where('book_id', $book->id)->delete();
             foreach ($keywords as $word) {
                 Keyword::query()->firstOrCreate([
@@ -182,6 +186,9 @@ class BookController extends Controller
         ]);
 
         $input = array_map('strip_tags', $input);
+
+        foreach (['title','author','genre','language', 'keywords'] as $f)
+            if (isset($input[$f])) $input[$f] = ucwords(strtolower($input[$f]));
 
         try {
             $cover_path = null;

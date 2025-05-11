@@ -79,7 +79,7 @@
                     <input type="file" id="cover_path" name="cover_path">
 
                     <button type="submit">Search Book</button>
-                    <button class="confirmed" type="submit" formmethod="POST" formaction="/create-book">Create Book</button>
+                    <button class="confirmed" type="submit" formmethod="POST" formaction="/create-book" formenctype="multipart/form-data">Create Book</button>
                 </form>
             </div>
             @if($errors->any())
