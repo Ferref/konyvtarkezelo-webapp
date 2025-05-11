@@ -9,11 +9,18 @@
     <link rel="icon" href={{'stack-of-books.ico'}} type='image/x-icon'>
     <link rel="stylesheet" href="{{ asset('css/mystyle.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
     <script src={{asset('js/handler.js')}} defer></script>
+    <script src={{asset('js/ajaxload.js')}} defer></script>
+    <script src={{asset('js/hamburger.js')}} defer></script>
+
 </head>
 <body>
 <div class="app-container">
     <div id="left-panel">
+        <div class="navbar">
+            <button id="hamburger"><i class="fa fa-times" aria-label="Toggle"></i></button>
+        </div>
         <div id="search-create-panel">
             <form action="/get-books" method="GET" enctype="multipart/form-data">
                 @csrf
@@ -87,7 +94,7 @@
             @foreach($books as $book)
                 <div class="book-card">
                     @if(!empty($book['cover_path']))
-                        <div class="book-cover">
+                        <div class="book-cover book-cover-small">
                             <img src="{{ asset($book['cover_path']) }}" alt='cover-img'>
                         </div>
                     @endif

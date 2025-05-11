@@ -8,3 +8,4 @@ Array.from(confirmButtons).forEach(button => {
         }
     });
 });
+

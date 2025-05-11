@@ -63,7 +63,7 @@
         </div>
 
         @if(!empty($bookDetails['cover_path']))
-            <div class="book-cover-big">
+            <div class="book-cover book-cover-big">
                 <img src="{{ asset($bookDetails['cover_path']) }}" alt='cover-img'>
             </div>
         @endif
