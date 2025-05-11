@@ -99,7 +99,7 @@ class BookController extends Controller
 
     public function getBooks(Request $request)
     {
-        $filters = $request->only(['title','author','description','genre','language','keywords']);
+        $filters = $request->only(['title','author','description','genre','language','keywords', 'isbn']);
         $query = BookDetail::query()->with(['author','language','genre','keywords']);
 
         $selection = [
@@ -111,6 +111,9 @@ class BookController extends Controller
             'keywords' => Keyword::query()->pluck('keyword')->unique()->values()->all(),
         ];
 
+        if(!empty($filters['isbn'])){
+            $query->where('isbn','like','%'.$filters['isbn'].'%');
+        }
         if(!empty($filters['title'])){
             $query->where('title','like','%'.$filters['title'].'%');
         }
@@ -152,6 +155,8 @@ class BookController extends Controller
                     'updated_at' => $book->updated_at->toDateTimeString(),
                 ];
             });
+
+        $books = $books->sortByDesc('created_at');
 
         return view('home',['books'=>$books, 'selection'=>$selection]);
     }
