@@ -1,0 +1,1 @@
+Egy visszafogott könyvtárkezelő webapplikáció.
