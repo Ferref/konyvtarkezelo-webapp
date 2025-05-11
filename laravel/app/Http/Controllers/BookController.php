@@ -33,6 +33,7 @@ class BookController extends Controller
             foreach (['title','author','genre','language', 'keywords'] as $f)
                 if (isset($input[$f])) $input[$f] = ucwords(strtolower($input[$f]));
 
+            // Replacing cover path if new cover path available
             $input['existing_cover_path'] = $book['cover_path'];
 
             if ($request->hasFile('cover_path')) {
@@ -44,10 +45,8 @@ class BookController extends Controller
                 $cover = $input['existing_cover_path'];
             }
 
-            $book->update([
-                'isbn' => $input['isbn'],
-            ]);
-
+            // Update other fields
+            $book->update(['isbn' => $input['isbn']]);
             $authorId = Author::query()->firstOrCreate(['name' => $input['author']])->id;
             $languageId = Language::query()->firstOrCreate(['value' => $input['language']])->id;
             $genreId = Genre::query()->firstOrCreate([
@@ -115,6 +114,7 @@ class BookController extends Controller
             'keywords' => Keyword::query()->pluck('keyword')->unique()->values()->all(),
         ];
 
+        // Filtering results by input
         if(!empty($filters['isbn'])){
             $query->where('isbn','like','%'.$filters['isbn'].'%');
         }
@@ -143,6 +143,7 @@ class BookController extends Controller
             $query->whereHas('author', fn($a)=>$a->where('name','like','%'.$filters['author'].'%'));
         }
 
+        // Get results by filters
         $books = $query->get()->map(function(BookDetail $book){
                 $keywords = $book->keywords->pluck('keyword')->implode(', ');
                 return [
@@ -167,6 +168,7 @@ class BookController extends Controller
 
     public function create(Request $request)
     {
+        // Keywords stored as string separated by comma
         $keywords = $request->input('keyword', '');
         $keywordsArr = [];
 
@@ -187,6 +189,7 @@ class BookController extends Controller
 
         $input = array_map('strip_tags', $input);
 
+        // Captilize input-fields before inserting
         foreach (['title','author','genre','language', 'keywords'] as $f)
             if (isset($input[$f])) $input[$f] = ucwords(strtolower($input[$f]));
 
@@ -199,25 +202,13 @@ class BookController extends Controller
                 $coverFile->move(public_path('covers'), $coverFileName);
                 $cover_path = 'covers/' . $coverFileName;
             }
-            else{
+            else {
                 $cover_path = 'covers/no-cover.png';
             }
 
-            $authorId = Author::query()
-                ->firstOrCreate(['name' => $input['author']])
-                ->id;
-
-            $languageId = Language::query()
-                ->firstOrCreate(['value' => $input['language']])
-                ->id;
-
-            $genreId = Genre::query()
-                ->firstOrCreate([
-                    'language_id' => $languageId,
-                    'name' => $input['genre'],
-                ])
-                ->id;
-
+            $authorId = Author::query()->firstOrCreate(['name' => $input['author']])->id;
+            $languageId = Language::query()->firstOrCreate(['value' => $input['language']])->id;
+            $genreId = Genre::query()->firstOrCreate(['language_id' => $languageId, 'name' => $input['genre']])->id;
             $keywords = array_filter(array_map('trim', explode(',', $input['keywords'] ?? '')));
 
             foreach ($keywords as $word) {

@@ -35,7 +35,6 @@ $(document).ready(function() {
     });
 });
 
-
 // Hamburger handler
 $(function(){
     const mql = window.matchMedia('(max-width:768px)');
@@ -62,8 +61,13 @@ $(function(){
             $(this).removeClass('display-over').addClass('display-none');
         });
         $('#left-panel').toggleClass('collapsed');
-        $(this).find('i').toggleClass('fa-bars fa-times');
         $('#left-panel').toggleClass('fullscreen');
+
+        $(this).find('i').toggleClass('fa-bars fa-times');
+        if (mql.matches) {
+            $('body').toggleClass('no-scroll',
+                $('#left-panel').hasClass('fullscreen'));
+        }
     });
 });
 

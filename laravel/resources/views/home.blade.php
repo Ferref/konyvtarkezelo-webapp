@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
     <script src={{asset('js/handler.js')}} defer></script>
-    <script src={{asset('js/ajaxload.js')}} defer></script>
-    <script src={{asset('js/hamburger.js')}} defer></script>
 
 </head>
 <body>
