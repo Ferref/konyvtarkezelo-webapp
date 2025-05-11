@@ -84,6 +84,76 @@ class KeywordsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            // Macbeth
+            [
+                'keyword' => 'Ambition',
+                'book_id' => 5,
+                'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'keyword' => 'Power',
+                'book_id' => 5,
+                'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'keyword' => 'Tragedy',
+                'book_id' => 5,
+                'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            // Death on the Nile
+            [
+                'keyword' => 'Nile',
+                'book_id' => 6,
+                'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'keyword' => 'Cruise',
+                'book_id' => 6,
+                'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'keyword' => 'Murder',
+                'book_id' => 6,
+                'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            // Carrie
+            [
+                'keyword' => 'Telekinesis',
+                'book_id' => 7,
+                'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'keyword' => 'Revenge',
+                'book_id' => 7,
+                'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'keyword' => 'School',
+                'book_id' => 7,
+                'language_id' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
         ]);
     }
 }
